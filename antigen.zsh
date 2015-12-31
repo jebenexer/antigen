@@ -83,11 +83,16 @@ antigen-bundle () {
 
     local url="$1"
 
+    if [[ $url == bb:*/* ]]; then
+       url="git@bitbucket.org:${${%url##bb:}%.git}.git"
+    fi
+
     # Expand short github url syntax: `username/reponame`.
     if [[ $url != git://* &&
             $url != https://* &&
             $url != http://* &&
             $url != ssh://* &&
+            $url != git@* &&
             $url != /* &&
             $url != git@github.com:*/*
             ]]; then
@@ -174,7 +179,7 @@ antigen-revert () {
     # Takes a repo's clone dir and gives out the repo's original url that was
     # used to create the given directory path.
 
-    if [[ "$1" == ".zprezto" ]]; then
+    if [[ "$1" == ".zprezto" ]]; then # 
         # Prezto's (in `.zprezto`), is assumed to be from `sorin-ionescu`'s
         # remote.
         echo https://github.com/sorin-ionescu/prezto.git
